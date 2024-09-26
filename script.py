@@ -6,6 +6,9 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup
+
+from utils import parse_source
 
 
 options = Options()
@@ -14,7 +17,8 @@ options.add_experimental_option("detach", True)
                         #   options=options)
 driver = webdriver.Chrome(options=options)
 
-url = 'https://steamdb.info/sales/'
+# url = 'https://steamdb.info/sales/'
+url = 'https://steamdb.info/sales/?sort=discount_desc'
 driver.get(url)
 
 select_box_id = 'dt-length-0'
@@ -26,23 +30,5 @@ select = Select(select_box)
 select.select_by_visible_text("5K")
 print(f"select_box: {select_box}")
 
-
-# links = driver.find_elements("xpath", "//a[@href]")
-# # for link in links:
-#     # print(link)
-#     # print(100*'-')
-# skip_inner_htmls = [
-#     "<img",
-#     "<svg"
-# ]
-# for link in links:
-#     # Skip hrefs with images
-#     if any([skip in link.get_attribute("innerHTML") for skip in skip_inner_htmls]):
-#         continue
-
-#     print(f"{link.get_attribute('innerHTML')}")
-
-#     if " Price" in link.get_attribute("innerHTML"):
-#         print(f"Found Price in link")
-#         link.click()
-#         break
+page_source = driver.page_source
+parse_source(page_source)
